@@ -1,38 +1,54 @@
-/* Add a black background color to the top navigation */
-.topnav {
-    background-color: #d44237;
-    overflow: hidden;
-  }
-  
-  /* Style the links inside the navigation bar */
-  .topnav a {
-    float: left;
-    color: black;
-    text-align: center;
-    padding: 5px 5px;
-    text-decoration: none;
-    font-size: 17px;
-  }
-  
-  /* Change the color of links on hover */
-  .topnav a:hover {
-    background-color: #9c3128;
-    color: black;
-  }
-  
-  /* Add a color to the active/current link */
-  .topnav a.active {
-    background-color: #d44237;
-    color: black;
-  }
-
 body {
     background-color: black;
-    color: #d44237;
+    color: #bb3930;
   }
 
   h1 {
-    background-color: black;
-    color: #d44237;
-    font-family: Times New Roman;
+    background-color: #bb3930;
+    color: black;
+    font-family: Courier;
+    font-size: 20px;
   }
+
+.content{
+    background:black;
+    width:100%;
+    padding:10px;
+    height:100%;
+    box-sizing:border-box;
+    padding:10px;
+}
+.left{
+    width:auto;
+    float:left;
+    background: black;
+    height:100%;
+    border-style: double;
+    border-width: 7px;
+}
+.right{
+    width:35%;
+    float:right;
+    background: black;
+    height:100%;
+    border-style: double;
+    border-width: 7px;
+}
+
+a:link {
+  color: black;
+  background-color: #bb3930;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #bb3930;
+  background-color: black;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: black;
+  background-color: #bb3930;
+  text-decoration: none;
+}
