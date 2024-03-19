@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="favicon-16x16.png">
+    <link rel="stylesheet" href="style.css" />
+    <title>Using Tau</title>
+    </head>
+<body>
+        <header>
+          </header>
+          <main>
+            <p>
+            Documenting the journey of learning <strong>Tau</strong>.
+            <hr>
+            </p>
+            <h1>Compiling Tau Language (pre-release).</h1>
+            <a href="https://github.com/IDNI/tau-lang/tree/main"> Official Github repo</a>
+            </p>
+            <p>
+                As of today (March 19, 2024) Tau language can only be compiled on Linux (in my case I am using PopOs).
+            </p>
+                <p>~Start by cloning the tau-lang repository. Open the terminal and type:</p>
+                <p style="font-family:courier;">git clone https://github.com/IDNI/tau-lang.git</p>
+                <img src="Compiling Tau Lang\git clone.PNG" alt="cloning tau-lang" style="width:350px;height:14px;">
+                <br>
+                <img src="Compiling Tau Lang\git clone done.PNG" alt="cloning done" style="width:370.5px;height:94.5px;">
+                <p>~The tau-lang repository should now be in your files</p>
+                <p>~Navigate to the tau-lang path. In the terminal type:</p>
+                </p style="font-family:courier;">cd tau-lang</p>
+                <img src="Compiling Tau Lang\tau-lang cd.PNG" alt="path" style="width:182px;height:23.5px;">
+                <p>~Lets compile. In the terminal type:</p>
+                <p style="font-family:courier;">./release.sh ~or ./debug.sh</p>
+                <p>~Depending on the build to compile. In my case I will compile the release.</p>
+                <img src="Compiling Tau Lang\compiling.PNG" alt="compiling" style="width:400.5px;height:241px;">
+                <br><img src="Compiling Tau Lang\compiling-2.PNG" alt="compiling..." style="width:400.5px;height:241px;">
+                <p>~Compiling takes a while, specially if you are using a VM.</p>
+                <p>~Once compiled, navigate to build-Release or build-Debug (depending on the build) by typing in the terminal:</p>
+                <p style="font-family:courier;">cd build-Release</p>
+                <img src="Compiling Tau Lang\cd build.PNG" alt="navigating to build-Release" style="width:249px;height:24px;">
+                <p>~Launch the Tau REPL by typing:</p>
+                <p style="font-family:courier;">./tau</p>
+                <img src="Compiling Tau Lang\tau.PNG" alt="navigating to build-Release" style="width:353.5px;height:270.5px;">
+            </p>
+
+        </main>
+    </div>
+</body>
+</html>
