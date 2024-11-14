@@ -1,0 +1,44 @@
+# Railway signal safety system
+# Ensures safe train movements through a junction
+
+# Inputs
+sbf i1 = console  # Track 1 occupancy sensor
+sbf i2 = console  # Track 2 occupancy sensor
+sbf i3 = console  # Signal request track 1
+sbf i4 = console  # Signal request track 2
+
+# Outputs
+sbf o1 = console  # Signal 1 state
+sbf o2 = console  # Signal 2 state
+sbf o3 = console  # Junction lock state
+
+# Safety conditions:
+# 1. Never allow conflicting signals
+# 2. Lock junction when train approaches
+# 3. Maintain lock until train clears
+# 4. Time delay between signal changes
+
+# Signal safety interlock     # Track 1 signal logic
+r (!(o1[t] & o2[t]) && (o1[t] = (i3[t] & !i1[t-1] & !i1[t] & !o2[t-1] & !o2[t-2] & !i2[t])) && (o2[t] = ((o2[t] = (i4[t] & !i2[t-1] & !i2[t] & !o1[t-1] & !o1[t-2] & !i1[t])))) && (o3[t] = ((i1[t] | i2[t]) | (o3[t-1] & (i1[t] | i2[t]))))) && o1[0] = 0 && o2[0] = 0 && o3[0] = 0         
+# Signal requested
+# Track clear previously
+# Track still clear
+# Other signal was off
+# Other signal stable off
+# Other track clear
+
+# Track 2 signal logic
+# Signal requested
+# Track clear previously
+# Track still clear
+# Other signal was off
+# Other signal stable off
+# Other track clear
+
+# Junction locking
+# Lock if either track occupied
+# Maintain lock until tracks clear
+
+# Initial conditions
+
+q
