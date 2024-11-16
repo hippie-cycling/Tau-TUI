@@ -1,0 +1,17 @@
+# Define IO variables for testing
+# Input signal
+
+tau i1 = console  
+
+# Output signal
+
+tau o1 = console 
+
+# Simple predicate to test
+
+early[0](x) := {ex y (x & y = 0)}
+
+early[n](x) := early[n-1](x)
+
+# Simple specification for testing
+r o1[t] = i1[t] & early[0] (i1[t])
