@@ -63,8 +63,8 @@ class TauTUI(App):
         yield Header()
         yield StatsDisplay(id="stats-display")
         
-        # --- NEW HEADER WIDGET IS HERE ---
-        yield Static("[b]Tau TUI[/] [dim]v1.0[/]                                [dim]https://github.com/hippie-cycling/Tau-TUI[/]", id="app-header")
+
+        yield Static("[dim]https://github.com/hippie-cycling/Tau-TUI[/]", id="app-link")
 
         with Horizontal(id="main-container"):
             with Vertical(id="repl-container"):
@@ -114,6 +114,26 @@ class TauTUI(App):
 
                 cleaned_line = strip_ansi_codes(line_bytes.decode(errors="replace").strip())
                 
+                # --- START: NEW FILTERING LOGIC ---
+                if not cleaned_line:
+                    continue
+
+                last_cmd = getattr(self, "last_command", None)
+                prompt_str = "tau>"
+
+                # Define conditions for lines to ignore
+                is_prompt = cleaned_line == prompt_str
+                is_echo = last_cmd is not None and cleaned_line == last_cmd
+                is_prompt_and_echo = last_cmd is not None and cleaned_line == f"{prompt_str} {last_cmd}"
+
+                # If the line is a prompt or an echo, skip it
+                if is_prompt or is_echo or is_prompt_and_echo:
+                    # If we filtered an echo, reset last_command to avoid over-filtering
+                    if is_echo or is_prompt_and_echo:
+                        self.last_command = None
+                    continue
+                # --- END: NEW FILTERING LOGIC ---
+                
                 self.repl_log.write(cleaned_line)
                 self.debug_log.write(f"[{datetime.now().time()}] [#89b4fa bold]◀ RECV[/] [dim]({duration:.4f}s): {cleaned_line}[/]")
 
@@ -128,11 +148,14 @@ class TauTUI(App):
         command = message.value
 
         if hasattr(self, "process") and self.process.returncode is None:
-            self.repl_log.write(f"[#cba6f7]> {command}[/]")
+            # self.repl_log.write(f"[#cba6f7]> {command}[/]") # This line is removed
             self.history_log.write(f"[#ded1c2]» {command}[/]")
-            self.debug_log.write(f"[{datetime.now().time()}] [#ded1c2 bold]▶ SEND[/]: {command}")
+            self.debug_log.write(f"[{datetime.now().time()}] [#f5c2e7 bold]▶ SEND[/]: {command}")
             
             self.command_start_time = time.monotonic()
+            
+            # Save the command for filtering the echo from the process output
+            self.last_command = command 
             
             self.process.stdin.write((command + "\n").encode())
             await self.process.stdin.drain()
