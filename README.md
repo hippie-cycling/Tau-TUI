@@ -32,14 +32,38 @@ This project is a sophisticated, multi-panel Terminal User Interface (TUI) for i
 
 ---
 
-## How to Use
+## Configuration & Usage
 
-To run the TUI, you must first tell it where to find the `tau` executable. You can do this in one of three ways (from highest to lowest priority):
+To run the TUI, the script must know where to find the `tau` executable. There are several ways to configure this, listed from highest to lowest priority.
 
-### Option 1: Command-Line Argument (Recommended for temporary use)
+### Option 1: Command-Line Argument (Highest Priority)
 
-Provide the path directly when you run the script.
+Provide the path directly when you run the script. This method overrides all others.
 
 ```bash
-python tau_tui.py --tau-path /path/to/your/tau
-    ```
+python tau_tui.py --tau-path C:\path\to\your\tau.exe
+```
+
+### Option 2: Configuration File (config.ini)
+
+For a more permanent setting, you can edit the config.ini file.
+
+Open config.ini in a text editor.
+
+Set the value of TauExecutable to the full path of your tau executable.
+
+Important: Do not use quotes around the path.
+
+### Option 3: Automatic Detection (Lowest Priority)
+
+If no other configuration is provided, the script will automatically look for tau or tau.exe in the same directory as the script itself.
+
+---
+
+## Running the Application
+
+Once configured, simply run the script from your terminal:
+
+```bash
+python tau_tui.py
+```
