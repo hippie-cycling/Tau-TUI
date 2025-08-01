@@ -1,6 +1,6 @@
 # Tau Lang TUI Wrapper
 
-This project is a sophisticated, multi-panel Terminal User Interface (TUI) for interacting with the **[Tau-lang REPL](https://github.com/IDNI/tau-lang)**. It provides a user-friendly environment with separate panels for REPL interaction, command history, and a detailed debug log.
+This project is a multi-panel Terminal User Interface (TUI) for interacting with the **[Tau-lang REPL](https://github.com/IDNI/tau-lang)**. It provides a user-friendly environment with separate panels for REPL interaction, command history, and a detailed debug log.
 
 * **Multi-Panel Layout**: A clean interface with dedicated, scrollable panels for REPL output, command history, and a debug log.
 * **System Stats**: A live display of your current CPU and RAM usage.
