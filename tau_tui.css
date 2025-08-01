@@ -1,4 +1,4 @@
-/* --- Catppuccin Mocha Color Palette --- */
+/* --- Catppuccin Mocha Color Palette (Complete) --- */
 $rosewater: #f5e0dc;
 $flamingo: #f2cdcd;
 $pink: #f5c2e7;
@@ -37,11 +37,18 @@ Screen {
     layout: grid;
     grid-size: 2;
     grid-gutter: 1;
-    padding: 0 1; /* Adjusted padding */
+    padding: 0 1;
 }
 
-Vertical {
-    row-span: 2;
+#repl-container {
+    width: 1fr;
+}
+
+#right-column {
+    width: 1fr;
+    layout: grid;
+    grid-rows: 6fr 4fr;
+    grid-gutter: 1;
 }
 
 /* --- Stats Display --- */
@@ -55,7 +62,7 @@ Vertical {
 
 /* --- REPL Log and Input --- */
 #repl-log {
-    margin-bottom: 1;
+    height: 1fr;
     border: round $surface1;
     background: $base;
     padding: 0 1;
@@ -69,30 +76,26 @@ Input {
     }
 }
 
-/* --- Debug Log Container and Title --- */
-#debug-container {
+/* --- Right Column Containers --- */
+#history-container, #debug-container {
     border: round $surface1;
     background: $base;
     padding: 0;
     layout: vertical;
-    
-    /* When a child widget is focused, highlight the container */
-    &:focus-within {
-        border: round $mauve;
-    }
 }
 
-.title {
-    padding: 0 1;
-    text-align: center;
-    text-style: bold;
-    background: $surface1;
-    color: $mauve;
-    dock: top;
-}
-
-#debug-log {
+#history-log, #debug-log {
     border: none;
     background: $base;
     padding: 1;
+}
+
+/* --- Styling for the Static Titles --- */
+.title {
+    background: $surface1;
+    color: $mauve;
+    text-align: center;
+    text-style: bold;
+    dock: top;
+    padding: 0 1;
 }

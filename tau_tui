@@ -1,4 +1,5 @@
 import asyncio
+import asyncio
 import re
 import time
 from datetime import datetime
@@ -34,19 +35,23 @@ class TauTUI(App):
         yield Header()
         yield StatsDisplay(id="stats-display")
         with Horizontal(id="main-container"):
-            with Vertical():
-                # --- FIX IS HERE ---
+            with Vertical(id="repl-container"):
                 yield RichLog(id="repl-log", wrap=True, markup=True)
                 yield Input(placeholder="Enter Tau command...")
-            with Container(id="debug-container"):
-                yield Static("Debug Log", classes="title")
-                # --- AND HERE ---
-                yield RichLog(id="debug-log", wrap=True, markup=True)
+            
+            with Vertical(id="right-column"):
+                with Container(id="history-container"):
+                    yield Static("History", classes="title")
+                    yield RichLog(id="history-log", wrap=True, markup=True)
+                with Container(id="debug-container"):
+                    yield Static("Debug Log", classes="title")
+                    yield RichLog(id="debug-log", wrap=True, markup=True)
         yield Footer()
 
     def on_mount(self) -> None:
         self.repl_log = self.query_one("#repl-log", RichLog)
         self.debug_log = self.query_one("#debug-log", RichLog)
+        self.history_log = self.query_one("#history-log", RichLog)
         self.run_worker(self.run_tau_process, exclusive=True)
         self.query_one(Input).focus()
 
@@ -87,6 +92,7 @@ class TauTUI(App):
 
         if hasattr(self, "process") and self.process.returncode is None:
             self.repl_log.write(f"[#cba6f7]> {command}[/]")
+            self.history_log.write(f"[#f5c2e7]{command}[/]")
             self.debug_log.write(f"[{datetime.now().time()}] [#f5c2e7]SEND[/]: {command}")
             
             self.command_start_time = time.monotonic()
