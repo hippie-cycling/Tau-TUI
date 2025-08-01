@@ -13,40 +13,28 @@ from textual.containers import Horizontal, Vertical, Container
 from textual.widgets import Header, Footer, Input, RichLog, Static
 
 # --- Configuration Hierarchy ---
-
 def find_tau_executable():
     """Finds the Tau executable using a hierarchy of methods."""
-    
-    # 1. Check Command-Line Argument
     parser = argparse.ArgumentParser(description="A TUI wrapper for the Tau-lang REPL.")
     parser.add_argument("--tau-path", help="Path to the tau executable.")
     args = parser.parse_args()
     if args.tau_path and Path(args.tau_path).is_file():
         return args.tau_path
 
-    # 2. Check config.ini file
     config = configparser.ConfigParser()
     if config.read('config.ini') and 'Paths' in config and 'TauExecutable' in config['Paths']:
         path_from_config = config['Paths']['TauExecutable']
-        if Path(path_from_config).is_file():
+        if path_from_config and Path(path_from_config).is_file():
             return path_from_config
 
-    # 3. Automatic Search in common locations
-    search_paths = [
-        Path("./tau"),  # Current directory
-        Path("./tau.exe"), # Current directory (Windows)
-        Path.home() / "tau-lang" / "build" / "tau", # Example common path
-    ]
+    search_paths = [Path("./tau"), Path("./tau.exe")]
     for path in search_paths:
         if path.is_file():
             return str(path)
     
-    # 4. Fallback to asking the user
     return None
 
 TAU_EXECUTABLE_PATH = find_tau_executable()
-
-# The rest of the script is the same...
 
 def strip_ansi_codes(text: str) -> str:
     """Removes ANSI escape codes from a string."""
@@ -66,23 +54,30 @@ class TauTUI(App):
 
     CSS_PATH = "tau_tui.css"
     BINDINGS = [("ctrl+c", "quit", "Quit")]
-    
+
     def compose(self) -> ComposeResult:
         if not TAU_EXECUTABLE_PATH:
-            yield Static("[bold red]Error: Tau executable not found.[/]\n\nPlease configure the path in 'config.ini' or provide it with the --tau-path argument.", id="error-message")
+            yield Static("[bold red]Error: Tau executable not found.[/]\n\nPlease configure the path in 'config.ini' or use the --tau-path argument.", id="error-message")
             return
             
         yield Header()
         yield StatsDisplay(id="stats-display")
+        
+        # --- NEW HEADER WIDGET IS HERE ---
+        yield Static("[b]Tau TUI[/] [dim]v1.0[/]                                [dim]https://github.com/hippie-cycling/Tau-TUI[/]", id="app-header")
+
         with Horizontal(id="main-container"):
             with Vertical(id="repl-container"):
-                yield RichLog(id="repl-log", wrap=True, markup=True)
+                with Container(id="repl-border", classes="panel-container"):
+                    yield Static("REPL Output", classes="title")
+                    yield RichLog(id="repl-log", wrap=True, markup=True)
                 yield Input(placeholder="Enter Tau command...")
+            
             with Vertical(id="right-column"):
-                with Container(id="history-container"):
+                with Container(id="history-container", classes="panel-container"):
                     yield Static("History", classes="title")
                     yield RichLog(id="history-log", wrap=True, markup=True)
-                with Container(id="debug-container"):
+                with Container(id="debug-container", classes="panel-container"):
                     yield Static("Debug Log", classes="title")
                     yield RichLog(id="debug-log", wrap=True, markup=True)
         yield Footer()
@@ -90,6 +85,7 @@ class TauTUI(App):
     def on_mount(self) -> None:
         if not TAU_EXECUTABLE_PATH:
             return
+            
         self.repl_log = self.query_one("#repl-log", RichLog)
         self.debug_log = self.query_one("#debug-log", RichLog)
         self.history_log = self.query_one("#history-log", RichLog)
@@ -104,8 +100,8 @@ class TauTUI(App):
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.STDOUT,
             )
-            self.repl_log.write("[#a6e3a1]Tau REPL process started...[/]")
-            self.debug_log.write(f"[{datetime.now().time()}] [#a6e3a1]PROCESS STARTED[/]")
+            self.repl_log.write("[#ded1c2]▶ Tau REPL process started...[/]")
+            self.debug_log.write(f"[{datetime.now().time()}] [#ded1c2 bold]▶ PROCESS STARTED[/]")
 
             while self.process.returncode is None:
                 line_bytes = await self.process.stdout.readline()
@@ -119,22 +115,22 @@ class TauTUI(App):
                 cleaned_line = strip_ansi_codes(line_bytes.decode(errors="replace").strip())
                 
                 self.repl_log.write(cleaned_line)
-                self.debug_log.write(f"[{datetime.now().time()}] [#89b4fa]RECV[/] ({duration:.4f}s): {cleaned_line}")
+                self.debug_log.write(f"[{datetime.now().time()}] [#89b4fa bold]◀ RECV[/] [dim]({duration:.4f}s): {cleaned_line}[/]")
 
         except FileNotFoundError:
             self.repl_log.write(f"[#f38ba8]Error: Tau executable not found at '{TAU_EXECUTABLE_PATH}'.[/]")
         except Exception as e:
             self.repl_log.write(f"[#f38ba8]An unexpected error occurred: {e}[/]")
         finally:
-            self.debug_log.write(f"[{datetime.now().time()}] [#fab387]PROCESS FINISHED[/]")
+            self.debug_log.write(f"[{datetime.now().time()}] [#fab387 bold]■ PROCESS FINISHED[/]")
 
     async def on_input_submitted(self, message: Input.Submitted) -> None:
         command = message.value
 
         if hasattr(self, "process") and self.process.returncode is None:
             self.repl_log.write(f"[#cba6f7]> {command}[/]")
-            self.history_log.write(f"[#f5c2e7]{command}[/]")
-            self.debug_log.write(f"[{datetime.now().time()}] [#f5c2e7]SEND[/]: {command}")
+            self.history_log.write(f"[#ded1c2]» {command}[/]")
+            self.debug_log.write(f"[{datetime.now().time()}] [#ded1c2 bold]▶ SEND[/]: {command}")
             
             self.command_start_time = time.monotonic()
             
