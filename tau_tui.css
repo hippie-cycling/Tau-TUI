@@ -1,0 +1,98 @@
+/* --- Catppuccin Mocha Color Palette --- */
+$rosewater: #f5e0dc;
+$flamingo: #f2cdcd;
+$pink: #f5c2e7;
+$mauve: #cba6f7;
+$red: #f38ba8;
+$maroon: #eba0ac;
+$peach: #fab387;
+$yellow: #f9e2af;
+$green: #a6e3a1;
+$teal: #94e2d5;
+$sky: #89dceb;
+$sapphire: #74c7ec;
+$blue: #89b4fa;
+$lavender: #b4befe;
+$text: #cdd6f4;
+$subtext1: #bac2de;
+$subtext0: #a6adc8;
+$overlay2: #9399b2;
+$overlay1: #7f849c;
+$overlay0: #6c7086;
+$surface2: #585b70;
+$surface1: #45475a;
+$surface0: #313244;
+$base: #1e1e2e;
+$mantle: #181825;
+$crust: #11111b;
+
+/* --- Base Screen --- */
+Screen {
+    background: $mantle;
+    color: $text;
+}
+
+/* --- Main Layout --- */
+#main-container {
+    layout: grid;
+    grid-size: 2;
+    grid-gutter: 1;
+    padding: 0 1; /* Adjusted padding */
+}
+
+Vertical {
+    row-span: 2;
+}
+
+/* --- Stats Display --- */
+#stats-display {
+    height: 3;
+    content-align: center middle;
+    background: $surface0;
+    border: round $surface1;
+    margin-bottom: 1;
+}
+
+/* --- REPL Log and Input --- */
+#repl-log {
+    margin-bottom: 1;
+    border: round $surface1;
+    background: $base;
+    padding: 0 1;
+}
+
+Input {
+    background: $base;
+    border: round $surface1;
+    &:focus {
+        border: round $blue;
+    }
+}
+
+/* --- Debug Log Container and Title --- */
+#debug-container {
+    border: round $surface1;
+    background: $base;
+    padding: 0;
+    layout: vertical;
+    
+    /* When a child widget is focused, highlight the container */
+    &:focus-within {
+        border: round $mauve;
+    }
+}
+
+.title {
+    padding: 0 1;
+    text-align: center;
+    text-style: bold;
+    background: $surface1;
+    color: $mauve;
+    dock: top;
+}
+
+#debug-log {
+    border: none;
+    background: $base;
+    padding: 1;
+}
