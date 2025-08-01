@@ -1,4 +1,3 @@
-/* --- Catppuccin Mocha Color Palette (Complete) --- */
 $rosewater: #f5e0dc;
 $flamingo: #f2cdcd;
 $pink: #f5c2e7;
@@ -7,11 +6,11 @@ $red: #f38ba8;
 $maroon: #eba0ac;
 $peach: #fab387;
 $yellow: #f9e2af;
-$green: #a6e3a1;
-$teal: #94e2d5;
+$green: #1c5c54;
+$teal: #ded1c2;
 $sky: #89dceb;
 $sapphire: #74c7ec;
-$blue: #89b4fa;
+$blue: #395d62;
 $lavender: #b4befe;
 $text: #cdd6f4;
 $subtext1: #bac2de;
@@ -21,9 +20,9 @@ $overlay1: #7f849c;
 $overlay0: #6c7086;
 $surface2: #585b70;
 $surface1: #45475a;
-$surface0: #313244;
-$base: #1e1e2e;
-$mantle: #181825;
+$surface0: #0b1a2e;
+$base: #0b1a2e;
+$mantle: #0b1a2e;
 $crust: #11111b;
 
 /* --- Base Screen --- */
@@ -32,16 +31,33 @@ Screen {
     color: $text;
 }
 
+/* --- App Header (Title Bar) --- */
+#app-header {
+    background: $base;
+    color: $teal;
+    height: 1;
+    padding: 0 1;
+    /* Use grid to align text left and right */
+    layout: grid;
+    grid-size: 2;
+    grid-columns: 1fr 1fr;
+    & Static {
+        content-align-horizontal: right;
+    }
+}
+
 /* --- Main Layout --- */
 #main-container {
     layout: grid;
     grid-size: 2;
+    grid-columns: 2fr 1fr;
     grid-gutter: 1;
-    padding: 0 1;
+    padding: 1; /* Add padding around main panels */
 }
 
 #repl-container {
     width: 1fr;
+    layout: vertical;
 }
 
 #right-column {
@@ -57,17 +73,9 @@ Screen {
     content-align: center middle;
     background: $surface0;
     border: round $surface1;
-    margin-bottom: 1;
 }
 
-/* --- REPL Log and Input --- */
-#repl-log {
-    height: 1fr;
-    border: round $surface1;
-    background: $base;
-    padding: 0 1;
-}
-
+/* --- REPL Input --- */
 Input {
     background: $base;
     border: round $surface1;
@@ -76,26 +84,51 @@ Input {
     }
 }
 
-/* --- Right Column Containers --- */
-#history-container, #debug-container {
-    border: round $surface1;
+/* --- General Panel Container Style --- */
+.panel-container {
     background: $base;
     padding: 0;
     layout: vertical;
+    height: 1fr;
+    &:focus-within {
+        border: round $mauve;
+    }
 }
 
-#history-log, #debug-log {
+.title {
+    padding: 0 1;
+    text-align: center;
+    text-style: bold;
+    dock: top;
+}
+
+RichLog {
     border: none;
     background: $base;
     padding: 1;
 }
 
-/* --- Styling for the Static Titles --- */
-.title {
-    background: $surface1;
-    color: $mauve;
-    text-align: center;
-    text-style: bold;
-    dock: top;
-    padding: 0 1;
+/* --- Unique Border Colors --- */
+#repl-border {
+    border: round $blue;
+    & .title {
+        background: $blue;
+        color: $crust;
+    }
+}
+
+#history-container {
+    border: round $green;
+    & .title {
+        background: $green;
+        color: $crust;
+    }
+}
+
+#debug-container {
+    border: round $teal;
+    & .title {
+        background: $teal;
+        color: $crust;
+    }
 }
