@@ -1,16 +1,52 @@
 import asyncio
-import asyncio
 import re
 import time
+import os
+import argparse
+import configparser
 from datetime import datetime
+from pathlib import Path
 
 import psutil
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical, Container
 from textual.widgets import Header, Footer, Input, RichLog, Static
 
-# --- Configuration ---
-TAU_EXECUTABLE_PATH = r'C:\Users\daniel.navarro\Downloads\tau-0.7-win64/tau.exe'
+# --- Configuration Hierarchy ---
+
+def find_tau_executable():
+    """Finds the Tau executable using a hierarchy of methods."""
+    
+    # 1. Check Command-Line Argument
+    parser = argparse.ArgumentParser(description="A TUI wrapper for the Tau-lang REPL.")
+    parser.add_argument("--tau-path", help="Path to the tau executable.")
+    args = parser.parse_args()
+    if args.tau_path and Path(args.tau_path).is_file():
+        return args.tau_path
+
+    # 2. Check config.ini file
+    config = configparser.ConfigParser()
+    if config.read('config.ini') and 'Paths' in config and 'TauExecutable' in config['Paths']:
+        path_from_config = config['Paths']['TauExecutable']
+        if Path(path_from_config).is_file():
+            return path_from_config
+
+    # 3. Automatic Search in common locations
+    search_paths = [
+        Path("./tau"),  # Current directory
+        Path("./tau.exe"), # Current directory (Windows)
+        Path.home() / "tau-lang" / "build" / "tau", # Example common path
+    ]
+    for path in search_paths:
+        if path.is_file():
+            return str(path)
+    
+    # 4. Fallback to asking the user
+    return None
+
+TAU_EXECUTABLE_PATH = find_tau_executable()
+
+# The rest of the script is the same...
 
 def strip_ansi_codes(text: str) -> str:
     """Removes ANSI escape codes from a string."""
@@ -30,15 +66,18 @@ class TauTUI(App):
 
     CSS_PATH = "tau_tui.css"
     BINDINGS = [("ctrl+c", "quit", "Quit")]
-
+    
     def compose(self) -> ComposeResult:
+        if not TAU_EXECUTABLE_PATH:
+            yield Static("[bold red]Error: Tau executable not found.[/]\n\nPlease configure the path in 'config.ini' or provide it with the --tau-path argument.", id="error-message")
+            return
+            
         yield Header()
         yield StatsDisplay(id="stats-display")
         with Horizontal(id="main-container"):
             with Vertical(id="repl-container"):
                 yield RichLog(id="repl-log", wrap=True, markup=True)
                 yield Input(placeholder="Enter Tau command...")
-            
             with Vertical(id="right-column"):
                 with Container(id="history-container"):
                     yield Static("History", classes="title")
@@ -49,6 +88,8 @@ class TauTUI(App):
         yield Footer()
 
     def on_mount(self) -> None:
+        if not TAU_EXECUTABLE_PATH:
+            return
         self.repl_log = self.query_one("#repl-log", RichLog)
         self.debug_log = self.query_one("#debug-log", RichLog)
         self.history_log = self.query_one("#history-log", RichLog)

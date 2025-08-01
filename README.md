@@ -34,16 +34,12 @@ This project is a sophisticated, multi-panel Terminal User Interface (TUI) for i
 
 ## How to Use
 
-1.  **Configure the Executable Path**:
-    Open the `tau_tui.py` file and update the `TAU_EXECUTABLE_PATH` variable to point to the location of your `tau` executable.
+To run the TUI, you must first tell it where to find the `tau` executable. You can do this in one of three ways (from highest to lowest priority):
 
-    ```python
-    # tau_tui.py
-    TAU_EXECUTABLE_PATH = '/path/to/your/tau/executable' 
-    ```
+### Option 1: Command-Line Argument (Recommended for temporary use)
 
-2.  **Run the Application**:
-    Execute the Python script from your terminal.
-    ```bash
-    python tau_tui.py
+Provide the path directly when you run the script.
+
+```bash
+python tau_tui.py --tau-path /path/to/your/tau
     ```
