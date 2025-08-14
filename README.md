@@ -5,7 +5,6 @@ This project is a multi-panel Terminal User Interface (TUI) for interacting with
 * **Multi-Panel Layout**: A clean interface with dedicated, scrollable panels for REPL output, command history, and a debug log.
 * **System Stats**: A live display of your current CPU and RAM usage.
 * **Debug & Timing**: The debug panel shows a timestamped log of every command sent to the Tau REPL and every response received, including execution time.
-* **Themed Interface**: Styled with the popular Catppuccin color theme for a modern look.
 
 ---
 
@@ -67,3 +66,4 @@ Once configured, simply run the script from your terminal:
 ```bash
 python tau_tui.py
 ```
+
